@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - EpicEatery</title>
+  <link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <section class="login__section">
+    <div class="login__box">
+      <h2>Welcome to EpicEatery</h2>
+
+      <!-- Login Form -->
+      <div id="login-form-container">
+        <form id="login-form">
+          <input type="text" id="login-username" placeholder="Username" required />
+          <input type="password" id="login-password" placeholder="Password" required />
+          <button class="btn" type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <span id="switch-to-register">Sign Up</span></p>
+        <!-- Back Button as a Link -->
+        <p><a href="index.html" class="back-btn">Back to Home</a></p>
+      </div>
+
+     <!-- Sign Up Form -->
+    <!-- Register Form -->
+    <div id="register-form-container" style="display: none;">
+      <form id="register-form">
+        <input type="text" id="register-username" placeholder="Username" required />
+        <input type="email" id="register-email" placeholder="Email" required />
+        <input type="password" id="register-password" placeholder="Password" required />
+        <button class="btn" type="submit">Sign Up</button>
+      </form>
+      <p>Already have an account? <span id="switch-to-login">Log In</span></p>
+    </div>
+  </div>
+
+  </section>
+
+  <script>
+    // Check if there are existing users in localStorage, otherwise initialize with an empty array
+    let users = JSON.parse(localStorage.getItem('users')) || [
+      { username: 'john_doe', email: 'john@example.com', password: '12345' },
+      { username: 'jane_smith', email: 'jane@example.com', password: 'password123' }
+    ];
+  
+    // Function to save users to localStorage
+    function saveUsers() {
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+  
+    // Switch between Login and Register forms
+    document.getElementById('switch-to-register').addEventListener('click', function() {
+      document.getElementById('login-form-container').style.display = 'none';
+      document.getElementById('register-form-container').style.display = 'block';
+    });
+  
+    document.getElementById('switch-to-login').addEventListener('click', function() {
+      document.getElementById('register-form-container').style.display = 'none';
+      document.getElementById('login-form-container').style.display = 'block';
+    });
+  
+    // Handle Login form submission (basic validation)
+    document.getElementById("login-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("login-username").value;
+      const password = document.getElementById("login-password").value;
+  
+      // Check if the username and password match any user in the database
+      const user = users.find(user => user.username === username && user.password === password);
+  
+      if (user) {
+        alert("Logged in successfully!");
+        window.location.href = "home.html"; // Go to homepage after login
+      } else {
+        alert("Invalid username or password.");
+      }
+    });
+  
+    // Handle Register form submission (basic validation)
+    document.getElementById("register-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("register-username").value;
+      const email = document.getElementById("register-email").value;
+      const password = document.getElementById("register-password").value;
+  
+      // Check if the username or email already exists
+      const existingUser = users.find(user => user.username === username || user.email === email);
+  
+      if (existingUser) {
+        alert("Username or Email already exists.");
+      } else {
+        // Add new user to the array and save to localStorage
+        users.push({ username, email, password });
+        saveUsers();
+        alert("Account created successfully!");
+        window.location.href = "home.html"; // Go to homepage after registration
+      }
+    });
+  </script>
+  
+</body>
+</html>
